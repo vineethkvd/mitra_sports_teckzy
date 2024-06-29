@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mitra_sports_teckzy/feature/notification/controller/deleteNtf_controller.dart';
+import 'package:mitra_sports_teckzy/feature/notification/controller/notifiCount_controller.dart';
 import 'package:mitra_sports_teckzy/feature/notification/controller/notification_controller.dart';
 import 'package:mitra_sports_teckzy/feature/notification/controller/viewNtf_controller.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -18,6 +19,8 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   final NotificationController notificationController =
       Get.put(NotificationController());
+  final NotificationCountController notificationCountController =
+      Get.put(NotificationCountController());
   final ViewNotificationController viewNotificationController =
       Get.put(ViewNotificationController());
   final deleteNotificationController = Get.put(DeleteNotificationController());
@@ -60,6 +63,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             backgroundColor: Colors.white,
             leading: IconButton(
               onPressed: () {
+                notificationCountController.fetchNotificationsCount();
                 Get.back();
               },
               icon: const Icon(
@@ -70,7 +74,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             centerTitle: true,
             title: GradientText(
               'Notifications',
-              style:  TextStyle(
+              style: TextStyle(
                 fontSize: 20.sp,
                 fontFamily: "poppinssemibold",
               ),
@@ -85,7 +89,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Container(
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               color: AppColor.backGroundColor,
-              width: Get.width.w,
+              // width: Get.width.w,
               height: Get.height.h,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -296,180 +300,3 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 }
-
-//old code
-
-
-/*import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:mitra_sports_teckzy/feature/notification/controller/deleteNtf_controller.dart';
-import '../../../core/utils/configs/styles/colors.dart';
-import '../controller/notification_controller.dart';
-
-class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
-
-  @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
-}
-
-class _NotificationScreenState extends State<NotificationScreen> {
-  final NotificationController notificationController =
-      NotificationController();
-  final DeleteNotificationController deleteNotificationController =
-      Get.put(DeleteNotificationController());
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    notificationController.fetchNotifications();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-          extendBodyBehindAppBar: false,
-          appBar: AppBar(
-              backgroundColor: Colors.white,
-              leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(
-                    CupertinoIcons.back,
-                    color: AppColor.txtColorMain,
-                  )),
-              centerTitle: true,
-              title: Text(
-                "Notification",
-                style: TextStyle(
-                    fontSize: 18.sp,
-                    color: AppColor.blueColor,
-                    fontFamily: "poppinsBold"),
-              )),
-          body: Container(
-            padding: EdgeInsets.only(left: 10.w, right: 10.w),
-            color: AppColor.backGroundColor,
-            width: Get.width.w,
-            height: Get.height.h,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() {
-                  if (notificationController
-                      .notificationModel.value.data!.isEmpty) {
-                    return Expanded(
-                      child: Center(
-                          child: Text("No notifications available",
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: AppColor.txtColorMain,
-                                  fontFamily: "poppinsRegular"))),
-                    );
-                  } else {
-                    return Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.h),
-                        child: ListView.builder(
-                          itemCount: notificationController
-                              .notificationModel.value.data!.length,
-                          itemBuilder: (context, index) {
-                            final data = notificationController
-                                .notificationModel.value.data![index];
-                            List<String> dateTimeParts =
-                                data.msgSentTime!.split(" ");
-                            String date = dateTimeParts[0];
-                            String time = dateTimeParts[1].split(".")[0];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 4.h),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: AppColor.brownColor,
-                                ),
-                                height: 72.h,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Text("${data.notifiMsg}",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 14.sp,
-                                                color: AppColor.txtColorMain,
-                                                fontFamily: "poppinsRegular")),
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      SizedBox(
-                                        width: 120.w,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Date: $date",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: TextStyle(
-                                                    fontSize: 11.sp,
-                                                    color:
-                                                        AppColor.txtColorMain,
-                                                    fontFamily:
-                                                        "poppinsRegular")),
-                                            Text("Time: $time",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: TextStyle(
-                                                    fontSize: 11.sp,
-                                                    color:
-                                                        AppColor.txtColorMain,
-                                                    fontFamily:
-                                                        "poppinsRegular")),
-                                          ],
-                                        ),
-                                      ),
-                                      IconButton(
-                                          onPressed: () {
-                                            deleteNotificationController
-                                                .fetchDeleteData(
-                                                    notifiId: data.notifiId
-                                                        .toString());
-                                          },
-                                          icon: Icon(Icons.delete))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  }
-                }),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}*/

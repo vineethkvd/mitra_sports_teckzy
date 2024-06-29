@@ -48,7 +48,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
               child: Container(
                 padding: EdgeInsets.only(left: 10.w, right: 10.w),
                 color: AppColor.backGroundColor,
-                width: Get.width.w,
+               // width: Get.width.w,
                 height: Get.height.h,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

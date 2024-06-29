@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading: IconButton(
                   onPressed: () {
                     print("Back button pressed");
-                    Get.to(NavBar(), transition: Transition.cupertino);
+                    Get.to(() =>  NavBar(), transition: Transition.cupertino);
                   },
                   icon: const Icon(
                     CupertinoIcons.back,
@@ -58,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Container(
                 padding: EdgeInsets.only(left: 10.w, right: 10.w),
                 color: AppColor.backGroundColor,
-                width: Get.width.w,
+              //  width: Get.width.w,
                 height: Get.height.h,
                 child: Obx(
                   () => Column(

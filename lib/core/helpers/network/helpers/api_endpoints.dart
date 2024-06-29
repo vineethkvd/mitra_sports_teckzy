@@ -34,4 +34,6 @@ class ApiEndPoints {
   static const String verifyOtp = "checkotp.php";
   static const String forgetPassword = "forgotPassword.php";
   static const String changePassword = "update_password.php?api_key=&=&";
+  static const String customerCare = "customer_care.php";
+  static const String companyDetails = "company_details.php";
 }

@@ -5,7 +5,6 @@ import 'package:mitra_sports_teckzy/core/utils/configs/styles/colors.dart';
 import 'package:mitra_sports_teckzy/feature/home/view/lineGraph.dart';
 import 'package:mitra_sports_teckzy/feature/records/controller/myRecords_controller/gameType_controller.dart';
 import 'package:mitra_sports_teckzy/feature/slider/view/widget/slider_widget.dart';
-
 import '../../slider/controller/slider_controller.dart';
 
 import '../performance_pie_chart/controller/performance_controller.dart';
@@ -165,7 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColor.performancetxtColor,
-                        )),
+                        ),
+                    ),
                     LineGraphWidget(),
                   ],
                 ),

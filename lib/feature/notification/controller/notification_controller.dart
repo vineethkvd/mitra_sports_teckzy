@@ -49,7 +49,13 @@ class NotificationController extends GetxController {
           // Calculate unseen notifications count
           // If notificationModel.value.data is null, use an empty list as a default value
           //unseen notifications count
-          unseenCount.value = notificationModel.value.data?.length ?? 0;
+          // unseenCount.value = notificationModel.value.data?.length ?? 0;
+
+          // Calculate unseen notifications count
+          unseenCount.value = notificationModel.value.data
+                  ?.where((notification) => !notification.isSeen!)
+                  .length ??
+              0;
           print("Unseennotifi:$unseenCount");
         } else {
           throw Exception('Status is not true');

@@ -142,7 +142,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 child: InkWell(
                   onTap: () {
                     Get.back();
-                    Get.off(const ProfileScreen(),
+                    Get.off(() => const ProfileScreen(),
                         transition: Transition.cupertino);
                   },
                   child: Container(
@@ -185,7 +185,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 child: InkWell(
                   onTap: () {
                     Get.back();
-                    Get.off(const LearnScreen(),
+                    Get.off(() => const LearnScreen(),
                         transition: Transition.cupertino);
                   },
                   child: Container(
@@ -538,8 +538,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       onConfirm: () {
                         CacheHelper.clearData("userId");
                         Get.back();
-                        Get.offAll(
-                          const LoginScreen(),
+                        Get.offAll(() =>
+                        const LoginScreen(),
                           transition: Transition.leftToRightWithFade,
                         ); // Navigate to login screen
                       },

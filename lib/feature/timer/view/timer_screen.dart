@@ -55,14 +55,34 @@ class _TimerScreenState extends State<TimerScreen> {
   void handleTap() async {
     print(
         "handleTap called. Left tapped: $leftTapped, Right tapped: $rightTapped");
-    if (leftTapped && rightTapped) {
+    if (timerController.leftHandTapped.value &&
+        timerController.rightHandTapped.value) {
       if (timerController.isRunning.value) {
         print("Stopping timer from handleTap");
         await timerController.stopTimer();
       } else {
+        // print("Checking start timer from handleTap");
+        // await timerController.checkStartTimer();
+      }
+
+      leftTapped = false;
+      rightTapped = false;
+    }
+  }
+
+  void handleHold() async {
+    print(
+        "handleTap called. Left tapped: $leftTapped, Right tapped: $rightTapped");
+    if (timerController.leftHandTapped.value &&
+        timerController.rightHandTapped.value) {
+      if (timerController.isRunning.value) {
+        // print("Stopping timer from handleTap");
+        // await timerController.stopTimer();
+      } else {
         print("Checking start timer from handleTap");
         await timerController.checkStartTimer();
       }
+
       leftTapped = false;
       rightTapped = false;
     }
@@ -87,7 +107,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   icon: const Icon(Icons.arrow_back_ios_new)),
               title: GradientText(
                 'Practice',
-                style:  TextStyle(
+                style: TextStyle(
                   fontSize: 12.sp,
                   fontFamily: "poppinssemibold",
                 ),
@@ -171,33 +191,28 @@ class _TimerScreenState extends State<TimerScreen> {
                                         timerGameType.selectedGameId.value =
                                             newValue!;
                                         timerController
-                                            .onGameTypeChanged(newValue!);
+                                            .onGameTypeChanged(newValue);
                                       },
                                     ),
                                   );
                                 }
                               }),
-                             Spacer(flex: 1,),
+                              const Spacer(
+                                flex: 1,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Obx(() {
-                                    Color leftColor = timerController
-                                        .leftIndicatorColor.value;
-                                    Color rightColor = timerController
-                                        .rightIndicatorColor.value;
-
-                                    if (rightColor == Colors.red) {
-                                      leftColor = Colors.white;
-                                    }
                                     return Container(
                                       width: 20.w,
                                       height: 50.h,
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(90.r),
-                                        color: leftColor,
+                                        color: timerController
+                                            .leftIndicatorColor.value,
                                         border: Border.all(
                                             width: 2.w,
                                             color: AppColor.txtColorMain),
@@ -224,7 +239,9 @@ class _TimerScreenState extends State<TimerScreen> {
                                   ),
                                 ],
                               ),
-                              Spacer(flex: 3,),
+                              const Spacer(
+                                flex: 3,
+                              ),
                             ],
                           ),
                           Row(
@@ -232,22 +249,7 @@ class _TimerScreenState extends State<TimerScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GestureDetector(
-                                onTap: /*() async {
-                                  if (timerGameType
-                                      .selectedGameId.value.isEmpty) {
-                                    CustomSnackBar.showCustomErrorSnackBar(
-                                        title: "Warning",
-                                        message: 'Please Select the Game Type');
-                                  } else {
-                                    timerController.leftHandTapped.value = true;
-                                    await timerController.checkStartTimer();
-                                  }
-                                },
-                                onLongPressEnd: (details) {
-                                  timerController.leftHandTapped.value = false;
-                                  timerController.stopTimer();
-                                },*/
-                                    () async {
+                                onLongPressStart: (_) {
                                   if (timerGameType
                                       .selectedGameId.value.isEmpty) {
                                     CustomSnackBar.showCustomErrorSnackBar(
@@ -256,6 +258,24 @@ class _TimerScreenState extends State<TimerScreen> {
                                   } else {
                                     leftTapped = true;
                                     timerController.leftHandTapped.value = true;
+                                    timerController.signalIndicator();
+                                  }
+                                },
+                                onLongPressEnd: (_) {
+                                  if (timerController
+                                              .leftIndicatorColor.value ==
+                                          Colors.green &&
+                                      timerController
+                                              .rightIndicatorColor.value ==
+                                          Colors.red) {
+                                    leftTapped = true;
+                                    handleHold();
+                                  }
+                                },
+                                onTapDown: (_) {
+                                  if (timerController.isRunning.value) {
+                                    timerController.leftHandTapped.value = true;
+                                    leftTapped = true;
                                     handleTap();
                                   }
                                 },
@@ -293,7 +313,6 @@ class _TimerScreenState extends State<TimerScreen> {
                                       Obx(
                                         () => Text(
                                           timerController.getFormattedTime(),
-                                          // '${timerController.minutes.value} : ${timerController.seconds.value} : ${timerController.milliseconds.value}',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20.sp,
@@ -386,36 +405,34 @@ class _TimerScreenState extends State<TimerScreen> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(right: 15.w),
-                                child: GestureDetector(
-                                  onTap: /*() async {
+                                child:  GestureDetector(
+                                  onLongPressStart: (_) {
                                     if (timerGameType
                                         .selectedGameId.value.isEmpty) {
                                       CustomSnackBar.showCustomErrorSnackBar(
                                           title: "Warning",
-                                          message:
-                                              'Please Select the Game Type');
-                                    } else {
-                                      timerController.rightHandTapped.value =
-                                          true;
-                                      await timerController.checkStartTimer();
-                                    }
-                                  },
-                                  onLongPressEnd: (details) async {
-                                    timerController.rightHandTapped.value =
-                                        false;
-                                    await timerController.stopTimer();
-                                  },*/
-                                      () async {
-                                    if (timerGameType
-                                        .selectedGameId.value.isEmpty) {
-                                      CustomSnackBar.showCustomErrorSnackBar(
-                                          title: "Warning",
-                                          message:
-                                              'Please Select the Game Type');
+                                          message: 'Please Select the Game Type');
                                     } else {
                                       rightTapped = true;
-                                      timerController.rightHandTapped.value =
-                                          true;
+                                      timerController.rightHandTapped.value = true;
+                                      timerController.signalIndicator();
+                                    }
+                                  },
+                                  onLongPressEnd: (_) {
+                                    if (timerController
+                                        .leftIndicatorColor.value ==
+                                        Colors.green &&
+                                        timerController
+                                            .rightIndicatorColor.value ==
+                                            Colors.red) {
+                                      rightTapped = true;
+                                      handleHold();
+                                    }
+                                  },
+                                  onTapDown: (_) {
+                                    if (timerController.isRunning.value) {
+                                      timerController.rightHandTapped.value = true;
+                                      rightTapped = true;
                                       handleTap();
                                     }
                                   },

@@ -8,7 +8,7 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../controller/privacy_policy_controller.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
-  const PrivacyPolicyScreen({super.key});
+  const PrivacyPolicyScreen({Key? key}) : super(key: key);
 
   @override
   State<PrivacyPolicyScreen> createState() => _PrivacyPolicyScreenState();
@@ -16,6 +16,7 @@ class PrivacyPolicyScreen extends StatefulWidget {
 
 class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   final PolicyController policyController = PolicyController();
+
   @override
   void initState() {
     super.initState();
@@ -24,69 +25,63 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColor.backGroundColor,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-              transition:
-              Transition.cupertino;
-            },
-            icon: const Icon(Icons.arrow_back_ios_new),
-          ),
-          title: GradientText(
-            'Privacy & Policy',
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontFamily: "poppinssemibold",
-            ),
-            colors: [
-              Color(0xff141356),
-              Color(0xff0095DA),
-            ],
-          ),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back_ios_new),
         ),
-        body: Container(
-          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w),
-          color: AppColor.backGroundColor,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Obx(() => policyController.data.value.isNotEmpty
-                    ? Container(
-                    color: AppColor.backGroundColor,
-                        height: Get.height.h,
-                        width: Get.width.w,
-                        child: HtmlWidget(
-                          policyController.data.value,
-                          textStyle: TextStyle(
-                            fontSize: 15.sp,
-                            fontFamily: "poppinssemibold",
-                          ),
-                        ))
-                    : Container(
-                  color: AppColor.backGroundColor,
-                        height: Get.height.h,
-                        width: Get.width.w,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: Get.width * 0.3.w,
+        title: GradientText(
+          'Privacy & Policy',
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontFamily: "poppinssemibold",
+          ),
+          colors: [
+            Color(0xff141356),
+            Color(0xff0095DA),
+          ],
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: AppColor.backGroundColor,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.w),
+            color: AppColor.backGroundColor,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() => policyController.data.value.isNotEmpty
+                      ? SingleChildScrollView(
+                          child: Container(
+                            width: Get.width.w,
+                            child: HtmlWidget(
+                              policyController.data.value,
+                              textStyle: TextStyle(
+                                fontSize: 15.sp,
+                                fontFamily: "poppinssemibold",
+                              ),
                             ),
-                            const Center(child: Text("No data available"))
-                          ],
-                        ),
-                      )),
-              ],
+                          ),
+                        )
+                      : Container(
+                          width: Get.width.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              SizedBox(height: 100),
+                              Text("No data available"),
+                            ],
+                          ),
+                        )),
+                ],
+              ),
             ),
           ),
         ),

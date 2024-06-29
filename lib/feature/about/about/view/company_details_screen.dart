@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get/get.dart';
 import 'package:mitra_sports_teckzy/core/utils/configs/styles/colors.dart';
-import 'package:mitra_sports_teckzy/feature/about/about/controller/terms_controller.dart';
+import 'package:mitra_sports_teckzy/feature/about/about/controller/company_details_controller.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../controller/privacy_policy_controller.dart';
@@ -17,11 +17,11 @@ class CompanyDetailsScreen extends StatefulWidget {
 }
 
 class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
-  final TermsController termsController = TermsController();
+  final CompanyDetailsController companyDetailsController = CompanyDetailsController();
   @override
   void initState() {
     super.initState();
-    termsController.fetchTerm();
+    companyDetailsController.fetchCompanyDetails();
   }
 
   @override
@@ -52,43 +52,45 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
           ),
           centerTitle: true,
         ),
-        body: Container(
-          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w),
-          color: AppColor.backGroundColor,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Obx(() => termsController.data.value.isNotEmpty
-                    ? Container(
-                    color: AppColor.backGroundColor,
-                        height: Get.height.h,
-                        width: Get.width.w,
-                        child: HtmlWidget(
-                          termsController.data.value,
-                          textStyle: TextStyle(
-                            fontSize: 15.sp,
-                            fontFamily: "poppinssemibold",
-                          ),
-                        ))
-                    : Container(
-                  color: AppColor.backGroundColor,
-                        height: Get.height.h,
-                        width: Get.width.w,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: Get.width * 0.3.w,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w),
+            color: AppColor.backGroundColor,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Obx(() => companyDetailsController.data.value.isNotEmpty
+                      ? Container(
+                      color: AppColor.backGroundColor,
+                          height: Get.height.h,
+                          width: Get.width.w,
+                          child: HtmlWidget(
+                            companyDetailsController.data.value,
+                            textStyle: TextStyle(
+                              fontSize: 15.sp,
+                              fontFamily: "poppinssemibold",
                             ),
-                            const Center(child: Text("No data available"))
-                          ],
-                        ),
-                      )),
-              ],
+                          ))
+                      : Container(
+                    color: AppColor.backGroundColor,
+                          height: Get.height.h,
+                          width: Get.width.w,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: Get.width * 0.3.w,
+                              ),
+                              const Center(child: Text("No data available"))
+                            ],
+                          ),
+                        )),
+                ],
+              ),
             ),
           ),
         ),

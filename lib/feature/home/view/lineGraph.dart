@@ -16,8 +16,7 @@ class LineGraphWidget extends StatefulWidget {
 
 class _LineGraphWidgetState extends State<LineGraphWidget> {
   final HistoryController historyController = Get.put(HistoryController());
-  final AnalyticsController analyticsController =
-  Get.put(AnalyticsController());
+  final AnalyticsController analyticsController = Get.put(AnalyticsController());
 
   @override
   void initState() {
@@ -41,7 +40,7 @@ class _LineGraphWidgetState extends State<LineGraphWidget> {
       }
     }
 
-    totalTimeList = totalTimeList.reversed.toList();
+    //totalTimeList = totalTimeList.reversed.toList();
 
     final List<FlSpot> spots = List.generate(
       totalTimeList.length,
@@ -80,7 +79,11 @@ class _LineGraphWidgetState extends State<LineGraphWidget> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final gameTypes = analyticsController.dataList
+      if (analyticsController.dailyDataList.isEmpty) {
+        return Center(child: Text('No data available'));
+      }
+
+      final gameTypes = analyticsController.dailyDataList
           .map((data) => data.gameTypeName)
           .toList();
 
@@ -89,7 +92,7 @@ class _LineGraphWidgetState extends State<LineGraphWidget> {
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           dragStartBehavior: DragStartBehavior.start,
-          physics: const BouncingScrollPhysics (),
+          physics: const BouncingScrollPhysics(),
           itemCount: gameTypes.length,
           itemBuilder: (context, index) {
             final gameType = gameTypes[index];
@@ -99,151 +102,158 @@ class _LineGraphWidgetState extends State<LineGraphWidget> {
 
             // Fetch the best timing from analyticsController
             final bestTiming =
-                analyticsController.dataList[index].bestRecords ?? 'N/A';
-            final totalgamePlayed =
-                analyticsController.dataList[index].gamesPlayed;
+                analyticsController.dailyDataList[index].overallMinTime ?? 'N/A';
+            final totalGamePlayed =
+                analyticsController.dailyDataList[index].overallGamesPlayed ?? 0;
 
             return Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              padding: EdgeInsets.all(8.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  margin: EdgeInsets.symmetric(vertical: 10.h),
+                  padding: EdgeInsets.all(8.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Graph for $gameType",
-                        style: TextStyle(
-                          fontFamily: "poppinsMedium",
-                          color: AppColor.headingColor,
-                          fontSize: 12.sp,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Graph for $gameType",
+                            style: TextStyle(
+                              fontFamily: "poppinsMedium",
+                              color: AppColor.headingColor,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          Text(
+                            "Best Timing: $bestTiming",
+                            style: TextStyle(
+                              fontFamily: "poppinsMedium",
+                              color: AppColor.headingColor,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Best Timing: $bestTiming",
-                        style: TextStyle(
-                          fontFamily: "poppinsMedium",
-                          color: AppColor.headingColor,
-                          fontSize: 12.sp,
+                      SizedBox(height: 10.h),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: totalGamePlayed > 18
+                                  ? spots.length * 15
+                                  : MediaQuery.of(context).size.width * .9,
+                              height: 250.h,
+                              child: historyController.historyList.isEmpty // Check if history list is empty
+                                  ? Center(
+                                child: Text(
+                                  "Start practice to view your performance graph here",
+                                  style: TextStyle(
+                                    fontFamily: "poppinsMedium",
+                                    color: AppColor.headingColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              )
+                                  : LineChart(
+                                LineChartData(
+                                  lineTouchData: const LineTouchData(
+                                    handleBuiltInTouches: true,
+                                  ),
+                                  gridData: const FlGridData(show: true),
+                                  titlesData: FlTitlesData(
+                                    rightTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false,
+                                        getTitlesWidget: (value, meta) {
+                                          return SideTitleWidget(
+                                            axisSide: meta.axisSide,
+                                            child: Text(
+                                              leftTitles[value.toInt()] ?? '',
+                                              style: TextStyle(
+                                                fontSize: 10.sp,
+                                                color: AppColor.blackTextColor,
+                                                fontFamily: "poppinsRegular",
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        reservedSize: 30,
+                                      ),
+                                    ),
+                                    topTitles: const AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: false,
+                                        interval: 1,
+                                        getTitlesWidget: (value, meta) {
+                                          return SideTitleWidget(
+                                            axisSide: meta.axisSide,
+                                            child: Text(
+                                              bottomTitles[value.toInt()] ?? '',
+                                              style: TextStyle(
+                                                fontSize: 10.sp,
+                                                color: AppColor.blackTextColor,
+                                                fontFamily: "poppinsRegular",
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    leftTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        getTitlesWidget: (value, meta) {
+                                          return SideTitleWidget(
+                                            axisSide: meta.axisSide,
+                                            child: Text(
+                                              leftTitles[value.toInt()] ?? '',
+                                              style: TextStyle(
+                                                fontSize: 10.sp,
+                                                color: AppColor.blackTextColor,
+                                                fontFamily: "poppinsRegular",
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        reservedSize: 30,
+                                      ),
+                                    ),
+                                  ),
+                                  borderData: FlBorderData(show: true),
+                                  lineBarsData: [
+                                    LineChartBarData(
+                                      isCurved: false,
+                                      color: Colors.blue,
+                                      barWidth: 2,
+                                      belowBarData: BarAreaData(
+                                        show: true,
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Color(0xFF1632C5).withOpacity(0.8),
+                                            Color(0xff0095da).withOpacity(0.8),
+                                            Color(0xff0095da).withOpacity(0.5),
+                                            Color(0xffb7e4f8),
+                                          ],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                        ),
+                                      ),
+                                      dotData: FlDotData(show: true),
+                                      spots: spots,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10.h),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          height: 250.h,
-                          child: historyController.historyList
-                              .isEmpty // Check if history list is empty
-                              ? Center(
-                            child: Text(
-                              "Start practice to view your performance graph here",
-                              style: TextStyle(
-                                fontFamily: "poppinsMedium",
-                                color: AppColor.headingColor,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          )
-                              : LineChart(
-                            LineChartData(
-                              lineTouchData: const LineTouchData(
-                                handleBuiltInTouches: true,
-                              ),
-                              gridData: const FlGridData(show: true),
-                              titlesData: FlTitlesData(
-                                rightTitles: const AxisTitles(
-                                  sideTitles:
-                                  SideTitles(showTitles: false),
-                                ),
-                                topTitles: AxisTitles(
-                                  sideTitles:
-                                  SideTitles(showTitles: false),
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: false,
-                                    interval: 1,
-                                    getTitlesWidget:
-                                        (double value, TitleMeta meta) {
-                                      return SideTitleWidget(
-                                        axisSide: meta.axisSide,
-                                        child: Text(
-                                          bottomTitles[value.toInt()] ??
-                                              '',
-                                          style: TextStyle(
-                                            fontSize: 10.sp,
-                                            color:
-                                            AppColor.blackTextColor,
-                                            fontFamily: "poppinsRegular",
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    getTitlesWidget:
-                                        (double value, TitleMeta meta) {
-                                      return SideTitleWidget(
-                                        axisSide: meta.axisSide,
-                                        child: Text(
-                                          leftTitles[value.toInt()] ?? '',
-                                          style: TextStyle(
-                                            fontSize: 10.sp,
-                                            color:
-                                            AppColor.blackTextColor,
-                                            fontFamily: "poppinsRegular",
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    reservedSize: 30,
-                                  ),
-                                ),
-                              ),
-                              borderData: FlBorderData(show: true),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  isCurved: false,
-                                  color: Colors.blue,
-                                  barWidth: 2,
-                                  belowBarData: BarAreaData(
-                                    show: true,
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF1632C5)
-                                            .withOpacity(0.8),
-                                        Color(0xff0095da)
-                                            .withOpacity(0.8),
-                                        Color(0xff0095da)
-                                            .withOpacity(0.5),
-                                        Color(0xffb7e4f8),
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                    ),
-                                  ),
-                                  dotData: FlDotData(show: true),
-                                  spots: spots,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
             );
+
           },
         ),
       );

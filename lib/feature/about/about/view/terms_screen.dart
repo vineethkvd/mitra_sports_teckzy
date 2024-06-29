@@ -24,9 +24,7 @@ class _TermsScreenState extends State<TermsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColor.backGroundColor,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: IconButton(
@@ -50,43 +48,49 @@ class _TermsScreenState extends State<TermsScreen> {
           ),
           centerTitle: true,
         ),
-        body: Container(
-          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w),
+        body:  Container(
           color: AppColor.backGroundColor,
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Obx(() => termsController.data.value.isNotEmpty
-                    ? Container(
+          child: Container(
+            padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w),
+            color: AppColor.backGroundColor,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Obx(() => termsController.data.value.isNotEmpty
+                      ? SingleChildScrollView(
+                        child: Container(
+                        color: AppColor.backGroundColor,
+                           // height: Get.height.h,
+                            width: Get.width.w,
+                            child: HtmlWidget(
+                              termsController.data.value,
+                              textStyle: TextStyle(
+                                fontSize: 14.sp,
+                                fontFamily: "poppinssemibold",
+                              ),
+                            )),
+                      )
+                      : Container(
                     color: AppColor.backGroundColor,
-                        height: Get.height.h,
-                        width: Get.width.w,
-                        child: HtmlWidget(
-                          termsController.data.value,
-                          textStyle: TextStyle(
-                            fontSize: 15.sp,
-                            fontFamily: "poppinssemibold",
+                         // height: Get.height.h,
+                          width: Get.width.w,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: Get.width * 0.3.w,
+                              ),
+                              const Center(child: Text("No data available"))
+                            ],
                           ),
-                        ))
-                    : Container(
-                  color: AppColor.backGroundColor,
-                        height: Get.height.h,
-                        width: Get.width.w,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: Get.width * 0.3.w,
-                            ),
-                            const Center(child: Text("No data available"))
-                          ],
-                        ),
-                      )),
-              ],
+                        )),
+                ],
+              ),
             ),
           ),
         ),

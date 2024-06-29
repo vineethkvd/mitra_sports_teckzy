@@ -25,15 +25,15 @@ class PolicyController extends GetxController {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         policyModel(PrivacyPolicyModel.fromJson(responseData));
-        print("success");
+        print("success to fetch privacy policy $responseData");
         data.value = policyModel.value.data!.first;
       } else if (response.statusCode == 401) {
         final responseData = json.decode(response.body);
         policyModel(PrivacyPolicyModel.fromJson(responseData));
-        print("success");
+        print("success to fetch privacy policy $responseData");
         data.value = policyModel.value.data!.first;
       } else {
-        throw Exception('Failed to fetch slider data');
+        throw Exception('Failed to fetch privacy policy');
       }
     } catch (error) {
       if (kDebugMode) {

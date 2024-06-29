@@ -45,7 +45,7 @@ class ViewNotificationController extends GetxController {
 
         if (responseData['status'] == true) {
           print("Notification marked as viewed successfully");
-          notificationController.unseenCount.value--;
+          notificationController.unseenCount.value = 0;
           //notificationController.fetchNotifications();
           print("responsedata view notif:$responseData");
         } else {

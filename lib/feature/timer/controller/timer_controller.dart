@@ -29,6 +29,7 @@ class TimerController extends GetxController {
   var timerStarted = false.obs;
   Rx<Color> leftIndicatorColor = Colors.white.obs;
   Rx<Color> rightIndicatorColor = Colors.white.obs;
+  Rx dateTime = DateTime.now().obs;
 
   @override
   void onInit() {
@@ -59,36 +60,26 @@ class TimerController extends GetxController {
     }
   }
 
-  // Future<void> startTimer() async {
-  //   isRunning.value = true;
-  //   timerColor.value = Colors.green;
-  //   startTime.value = DateTime.now().millisecondsSinceEpoch;
-  //   _timer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
-  //     milliseconds.value += 1;
-  //     if (milliseconds.value >= 1000) {
-  //       seconds.value++;
-  //       milliseconds.value = 0;
-  //     }
-  //     if (seconds.value >= 60) {
-  //       minutes.value++;
-  //       seconds.value = 0;
-  //     }
-  //   });
-  // }
 
   Future<void> startTimer() async {
     isRunning.value = true;
     timerColor.value = Colors.green;
-    leftIndicatorColor.value = Colors.green; // Change left indicator color to green
+    leftIndicatorColor.value =
+        Colors.green; // Change left indicator color to green
     // rightIndicatorColor.value = Colors.green;
-    startTime.value = DateTime.now().millisecondsSinceEpoch;
+    startTime.value = DateTime.now().millisecondsSinceEpoch; //1:00 00
 
     _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
-      int now = DateTime.now().millisecondsSinceEpoch;
-      int elapsedTime = now - startTime.value;
+      int tempSec = 0;
+      // int tempMin = 0;
+      int now = DateTime.now().millisecondsSinceEpoch; // 1:00 01
+      int elapsedTime = now - startTime.value; // 00:00:01
 
       milliseconds.value = elapsedTime % 1000;
-      seconds.value = (elapsedTime / 1000).floor();  // Convert to int using floor
+      tempSec = (elapsedTime / 1000).floor();
+      seconds.value =
+      tempSec > 60 ? (tempSec % 60) : tempSec; // Convert to int using floor
+      // tempMin = (elapsedTime / (1000 * 60)).floor();
       minutes.value = (elapsedTime / (1000 * 60)).floor();
     });
   }
@@ -99,7 +90,8 @@ class TimerController extends GetxController {
       isRunning.value = false;
       timerColor.value = Colors.red;
       // leftIndicatorColor.value = Colors.red;
-      rightIndicatorColor.value = Colors.red; // Change right indicator color to red
+      rightIndicatorColor.value =
+          Colors.red; // Change right indicator color to red
     }
   }
 
@@ -110,6 +102,9 @@ class TimerController extends GetxController {
     seconds.value = 0;
     minutes.value = 0;
     isRunning.value = false;
+    timerStarted.value = false;
+    leftHandTapped.value = false;
+    rightHandTapped.value = false;
     leftIndicatorColor.value = Colors.white; // Reset left indicator color
     rightIndicatorColor.value = Colors.white; // Reset right indicator color
   }
@@ -117,17 +112,22 @@ class TimerController extends GetxController {
   Future<void> checkStartTimer() async {
     print(
         "Checking start timer: leftHandTapped=${leftHandTapped.value}, rightHandTapped=${rightHandTapped.value}");
-    if (leftHandTapped.value && rightHandTapped.value) {
-      if (!timerStarted.value) {
-        print("Both hands tapped - starting timer");
-        await startTimer();
-        timerStarted.value = true;
-      } else {
-        print("Both hands tapped - stopping timer");
-        await stopTimer();
-        timerStarted.value = false;
-      }
+    // if (leftHandTapped.value && rightHandTapped.value) {
+    if (!timerStarted.value) {
+      print("--------------------------timer Started-------------------------");
+      print("Both hands tapped - starting timer");
+      leftHandTapped.value = false;
+      rightHandTapped.value = false;
+      await startTimer();
+      timerStarted.value = true;
+    } else {
+      print("Both hands tapped - stopping timer");
+      await stopTimer();
+      timerStarted.value = false;
+      leftHandTapped.value = false;
+      rightHandTapped.value = false;
     }
+    // }
   }
 
   var timerModel = const TimerModel().obs;
@@ -139,7 +139,7 @@ class TimerController extends GetxController {
     const apiToken = ApiEndPoints.apiToken;
     var userId = await CacheHelper.getData('userId');
     var gameId = timerGameType.selectedGameId.value;
-    if (gameId == null || gameId.toString().isEmpty) {
+    if (gameId.toString().isEmpty) {
       CustomSnackBar.showCustomErrorSnackBar(
           message: "Please Select the GameType", title: 'Error');
       return;
@@ -257,4 +257,11 @@ class TimerController extends GetxController {
 
     return "$formattedMinutes:$formattedSeconds:$formattedMilliseconds";
   }
-}
+
+  void signalIndicator() async{
+    rightIndicatorColor.value = Colors.red;
+    await Future.delayed(const Duration(milliseconds: 1000));
+  //  rightIndicatorColor.value = Colors.white;
+    leftIndicatorColor.value = Colors.green;
+  }
+  }

@@ -25,7 +25,7 @@ mixin _$AnalyticsModel {
   @JsonKey(name: 'message')
   String? get message => throw _privateConstructorUsedError;
   @JsonKey(name: 'data')
-  List<Data>? get data => throw _privateConstructorUsedError;
+  Data? get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +42,9 @@ abstract class $AnalyticsModelCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'status') bool? status,
       @JsonKey(name: 'message') String? message,
-      @JsonKey(name: 'data') List<Data>? data});
+      @JsonKey(name: 'data') Data? data});
+
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -74,8 +76,20 @@ class _$AnalyticsModelCopyWithImpl<$Res, $Val extends AnalyticsModel>
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<Data>?,
+              as Data?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $DataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $DataCopyWith<$Res>(_value.data!, (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
   }
 }
 
@@ -90,7 +104,10 @@ abstract class _$$AnalyticsModelImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'status') bool? status,
       @JsonKey(name: 'message') String? message,
-      @JsonKey(name: 'data') List<Data>? data});
+      @JsonKey(name: 'data') Data? data});
+
+  @override
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -118,9 +135,9 @@ class __$$AnalyticsModelImplCopyWithImpl<$Res>
           : message // ignore: cast_nullable_to_non_nullable
               as String?,
       data: freezed == data
-          ? _value._data
+          ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<Data>?,
+              as Data?,
     ));
   }
 }
@@ -131,8 +148,7 @@ class _$AnalyticsModelImpl implements _AnalyticsModel {
   const _$AnalyticsModelImpl(
       {@JsonKey(name: 'status') this.status,
       @JsonKey(name: 'message') this.message = '',
-      @JsonKey(name: 'data') final List<Data>? data = const []})
-      : _data = data;
+      @JsonKey(name: 'data') this.data = const Data()});
 
   factory _$AnalyticsModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AnalyticsModelImplFromJson(json);
@@ -143,16 +159,9 @@ class _$AnalyticsModelImpl implements _AnalyticsModel {
   @override
   @JsonKey(name: 'message')
   final String? message;
-  final List<Data>? _data;
   @override
   @JsonKey(name: 'data')
-  List<Data>? get data {
-    final value = _data;
-    if (value == null) return null;
-    if (_data is EqualUnmodifiableListView) return _data;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
+  final Data? data;
 
   @override
   String toString() {
@@ -166,13 +175,12 @@ class _$AnalyticsModelImpl implements _AnalyticsModel {
             other is _$AnalyticsModelImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            const DeepCollectionEquality().equals(other._data, _data));
+            (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, status, message, const DeepCollectionEquality().hash(_data));
+  int get hashCode => Object.hash(runtimeType, status, message, data);
 
   @JsonKey(ignore: true)
   @override
@@ -193,7 +201,7 @@ abstract class _AnalyticsModel implements AnalyticsModel {
   const factory _AnalyticsModel(
       {@JsonKey(name: 'status') final bool? status,
       @JsonKey(name: 'message') final String? message,
-      @JsonKey(name: 'data') final List<Data>? data}) = _$AnalyticsModelImpl;
+      @JsonKey(name: 'data') final Data? data}) = _$AnalyticsModelImpl;
 
   factory _AnalyticsModel.fromJson(Map<String, dynamic> json) =
       _$AnalyticsModelImpl.fromJson;
@@ -206,7 +214,7 @@ abstract class _AnalyticsModel implements AnalyticsModel {
   String? get message;
   @override
   @JsonKey(name: 'data')
-  List<Data>? get data;
+  Data? get data;
   @override
   @JsonKey(ignore: true)
   _$$AnalyticsModelImplCopyWith<_$AnalyticsModelImpl> get copyWith =>
@@ -219,16 +227,12 @@ Data _$DataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Data {
-  @JsonKey(name: 'game_type_id')
-  int? get gameTypeId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'game_type_name')
-  String? get gameTypeName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'games_played')
-  int? get gamesPlayed => throw _privateConstructorUsedError;
-  @JsonKey(name: 'min_time')
-  String? get bestRecords => throw _privateConstructorUsedError;
-  @JsonKey(name: "created_dt")
-  String? get createdDt => throw _privateConstructorUsedError;
+  @JsonKey(name: "daily")
+  List<Daily>? get daily => throw _privateConstructorUsedError;
+  @JsonKey(name: "weekly")
+  List<Daily>? get weekly => throw _privateConstructorUsedError;
+  @JsonKey(name: "monthly")
+  List<Daily>? get monthly => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -241,11 +245,9 @@ abstract class $DataCopyWith<$Res> {
       _$DataCopyWithImpl<$Res, Data>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'game_type_id') int? gameTypeId,
-      @JsonKey(name: 'game_type_name') String? gameTypeName,
-      @JsonKey(name: 'games_played') int? gamesPlayed,
-      @JsonKey(name: 'min_time') String? bestRecords,
-      @JsonKey(name: "created_dt") String? createdDt});
+      {@JsonKey(name: "daily") List<Daily>? daily,
+      @JsonKey(name: "weekly") List<Daily>? weekly,
+      @JsonKey(name: "monthly") List<Daily>? monthly});
 }
 
 /// @nodoc
@@ -261,33 +263,23 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameTypeId = freezed,
-    Object? gameTypeName = freezed,
-    Object? gamesPlayed = freezed,
-    Object? bestRecords = freezed,
-    Object? createdDt = freezed,
+    Object? daily = freezed,
+    Object? weekly = freezed,
+    Object? monthly = freezed,
   }) {
     return _then(_value.copyWith(
-      gameTypeId: freezed == gameTypeId
-          ? _value.gameTypeId
-          : gameTypeId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      gameTypeName: freezed == gameTypeName
-          ? _value.gameTypeName
-          : gameTypeName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      gamesPlayed: freezed == gamesPlayed
-          ? _value.gamesPlayed
-          : gamesPlayed // ignore: cast_nullable_to_non_nullable
-              as int?,
-      bestRecords: freezed == bestRecords
-          ? _value.bestRecords
-          : bestRecords // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdDt: freezed == createdDt
-          ? _value.createdDt
-          : createdDt // ignore: cast_nullable_to_non_nullable
-              as String?,
+      daily: freezed == daily
+          ? _value.daily
+          : daily // ignore: cast_nullable_to_non_nullable
+              as List<Daily>?,
+      weekly: freezed == weekly
+          ? _value.weekly
+          : weekly // ignore: cast_nullable_to_non_nullable
+              as List<Daily>?,
+      monthly: freezed == monthly
+          ? _value.monthly
+          : monthly // ignore: cast_nullable_to_non_nullable
+              as List<Daily>?,
     ) as $Val);
   }
 }
@@ -300,11 +292,9 @@ abstract class _$$DataImplCopyWith<$Res> implements $DataCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'game_type_id') int? gameTypeId,
-      @JsonKey(name: 'game_type_name') String? gameTypeName,
-      @JsonKey(name: 'games_played') int? gamesPlayed,
-      @JsonKey(name: 'min_time') String? bestRecords,
-      @JsonKey(name: "created_dt") String? createdDt});
+      {@JsonKey(name: "daily") List<Daily>? daily,
+      @JsonKey(name: "weekly") List<Daily>? weekly,
+      @JsonKey(name: "monthly") List<Daily>? monthly});
 }
 
 /// @nodoc
@@ -317,33 +307,23 @@ class __$$DataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameTypeId = freezed,
-    Object? gameTypeName = freezed,
-    Object? gamesPlayed = freezed,
-    Object? bestRecords = freezed,
-    Object? createdDt = freezed,
+    Object? daily = freezed,
+    Object? weekly = freezed,
+    Object? monthly = freezed,
   }) {
     return _then(_$DataImpl(
-      gameTypeId: freezed == gameTypeId
-          ? _value.gameTypeId
-          : gameTypeId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      gameTypeName: freezed == gameTypeName
-          ? _value.gameTypeName
-          : gameTypeName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      gamesPlayed: freezed == gamesPlayed
-          ? _value.gamesPlayed
-          : gamesPlayed // ignore: cast_nullable_to_non_nullable
-              as int?,
-      bestRecords: freezed == bestRecords
-          ? _value.bestRecords
-          : bestRecords // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdDt: freezed == createdDt
-          ? _value.createdDt
-          : createdDt // ignore: cast_nullable_to_non_nullable
-              as String?,
+      daily: freezed == daily
+          ? _value._daily
+          : daily // ignore: cast_nullable_to_non_nullable
+              as List<Daily>?,
+      weekly: freezed == weekly
+          ? _value._weekly
+          : weekly // ignore: cast_nullable_to_non_nullable
+              as List<Daily>?,
+      monthly: freezed == monthly
+          ? _value._monthly
+          : monthly // ignore: cast_nullable_to_non_nullable
+              as List<Daily>?,
     ));
   }
 }
@@ -352,34 +332,52 @@ class __$$DataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DataImpl implements _Data {
   const _$DataImpl(
-      {@JsonKey(name: 'game_type_id') this.gameTypeId = 0,
-      @JsonKey(name: 'game_type_name') this.gameTypeName = '',
-      @JsonKey(name: 'games_played') this.gamesPlayed = 0,
-      @JsonKey(name: 'min_time') this.bestRecords = '',
-      @JsonKey(name: "created_dt") this.createdDt = '0'});
+      {@JsonKey(name: "daily") final List<Daily>? daily = const [],
+      @JsonKey(name: "weekly") final List<Daily>? weekly = const [],
+      @JsonKey(name: "monthly") final List<Daily>? monthly = const []})
+      : _daily = daily,
+        _weekly = weekly,
+        _monthly = monthly;
 
   factory _$DataImpl.fromJson(Map<String, dynamic> json) =>
       _$$DataImplFromJson(json);
 
+  final List<Daily>? _daily;
   @override
-  @JsonKey(name: 'game_type_id')
-  final int? gameTypeId;
+  @JsonKey(name: "daily")
+  List<Daily>? get daily {
+    final value = _daily;
+    if (value == null) return null;
+    if (_daily is EqualUnmodifiableListView) return _daily;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Daily>? _weekly;
   @override
-  @JsonKey(name: 'game_type_name')
-  final String? gameTypeName;
+  @JsonKey(name: "weekly")
+  List<Daily>? get weekly {
+    final value = _weekly;
+    if (value == null) return null;
+    if (_weekly is EqualUnmodifiableListView) return _weekly;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Daily>? _monthly;
   @override
-  @JsonKey(name: 'games_played')
-  final int? gamesPlayed;
-  @override
-  @JsonKey(name: 'min_time')
-  final String? bestRecords;
-  @override
-  @JsonKey(name: "created_dt")
-  final String? createdDt;
+  @JsonKey(name: "monthly")
+  List<Daily>? get monthly {
+    final value = _monthly;
+    if (value == null) return null;
+    if (_monthly is EqualUnmodifiableListView) return _monthly;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'Data(gameTypeId: $gameTypeId, gameTypeName: $gameTypeName, gamesPlayed: $gamesPlayed, bestRecords: $bestRecords, createdDt: $createdDt)';
+    return 'Data(daily: $daily, weekly: $weekly, monthly: $monthly)';
   }
 
   @override
@@ -387,22 +385,18 @@ class _$DataImpl implements _Data {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DataImpl &&
-            (identical(other.gameTypeId, gameTypeId) ||
-                other.gameTypeId == gameTypeId) &&
-            (identical(other.gameTypeName, gameTypeName) ||
-                other.gameTypeName == gameTypeName) &&
-            (identical(other.gamesPlayed, gamesPlayed) ||
-                other.gamesPlayed == gamesPlayed) &&
-            (identical(other.bestRecords, bestRecords) ||
-                other.bestRecords == bestRecords) &&
-            (identical(other.createdDt, createdDt) ||
-                other.createdDt == createdDt));
+            const DeepCollectionEquality().equals(other._daily, _daily) &&
+            const DeepCollectionEquality().equals(other._weekly, _weekly) &&
+            const DeepCollectionEquality().equals(other._monthly, _monthly));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, gameTypeId, gameTypeName,
-      gamesPlayed, bestRecords, createdDt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_daily),
+      const DeepCollectionEquality().hash(_weekly),
+      const DeepCollectionEquality().hash(_monthly));
 
   @JsonKey(ignore: true)
   @override
@@ -420,31 +414,340 @@ class _$DataImpl implements _Data {
 
 abstract class _Data implements Data {
   const factory _Data(
-      {@JsonKey(name: 'game_type_id') final int? gameTypeId,
-      @JsonKey(name: 'game_type_name') final String? gameTypeName,
-      @JsonKey(name: 'games_played') final int? gamesPlayed,
-      @JsonKey(name: 'min_time') final String? bestRecords,
-      @JsonKey(name: "created_dt") final String? createdDt}) = _$DataImpl;
+      {@JsonKey(name: "daily") final List<Daily>? daily,
+      @JsonKey(name: "weekly") final List<Daily>? weekly,
+      @JsonKey(name: "monthly") final List<Daily>? monthly}) = _$DataImpl;
 
   factory _Data.fromJson(Map<String, dynamic> json) = _$DataImpl.fromJson;
 
   @override
-  @JsonKey(name: 'game_type_id')
-  int? get gameTypeId;
+  @JsonKey(name: "daily")
+  List<Daily>? get daily;
   @override
-  @JsonKey(name: 'game_type_name')
-  String? get gameTypeName;
+  @JsonKey(name: "weekly")
+  List<Daily>? get weekly;
   @override
-  @JsonKey(name: 'games_played')
-  int? get gamesPlayed;
-  @override
-  @JsonKey(name: 'min_time')
-  String? get bestRecords;
-  @override
-  @JsonKey(name: "created_dt")
-  String? get createdDt;
+  @JsonKey(name: "monthly")
+  List<Daily>? get monthly;
   @override
   @JsonKey(ignore: true)
   _$$DataImplCopyWith<_$DataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Daily _$DailyFromJson(Map<String, dynamic> json) {
+  return _Daily.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Daily {
+  @JsonKey(name: "game_type_id")
+  int? get gameTypeId => throw _privateConstructorUsedError;
+  @JsonKey(name: "game_type_name")
+  String? get gameTypeName => throw _privateConstructorUsedError;
+  @JsonKey(name: "games_played")
+  int? get gamesPlayed => throw _privateConstructorUsedError;
+  @JsonKey(name: "min_time")
+  String? get minTime => throw _privateConstructorUsedError;
+  @JsonKey(name: "min_time_date")
+  String? get minTimeDate => throw _privateConstructorUsedError;
+  @JsonKey(name: "overall_games_played")
+  int? get overallGamesPlayed => throw _privateConstructorUsedError;
+  @JsonKey(name: "overall_min_time")
+  String? get overallMinTime => throw _privateConstructorUsedError;
+  @JsonKey(name: "overall_min_time_date")
+  String? get overallMinTimeDate => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $DailyCopyWith<Daily> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $DailyCopyWith<$Res> {
+  factory $DailyCopyWith(Daily value, $Res Function(Daily) then) =
+      _$DailyCopyWithImpl<$Res, Daily>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: "game_type_id") int? gameTypeId,
+      @JsonKey(name: "game_type_name") String? gameTypeName,
+      @JsonKey(name: "games_played") int? gamesPlayed,
+      @JsonKey(name: "min_time") String? minTime,
+      @JsonKey(name: "min_time_date") String? minTimeDate,
+      @JsonKey(name: "overall_games_played") int? overallGamesPlayed,
+      @JsonKey(name: "overall_min_time") String? overallMinTime,
+      @JsonKey(name: "overall_min_time_date") String? overallMinTimeDate});
+}
+
+/// @nodoc
+class _$DailyCopyWithImpl<$Res, $Val extends Daily>
+    implements $DailyCopyWith<$Res> {
+  _$DailyCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? gameTypeId = freezed,
+    Object? gameTypeName = freezed,
+    Object? gamesPlayed = freezed,
+    Object? minTime = freezed,
+    Object? minTimeDate = freezed,
+    Object? overallGamesPlayed = freezed,
+    Object? overallMinTime = freezed,
+    Object? overallMinTimeDate = freezed,
+  }) {
+    return _then(_value.copyWith(
+      gameTypeId: freezed == gameTypeId
+          ? _value.gameTypeId
+          : gameTypeId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      gameTypeName: freezed == gameTypeName
+          ? _value.gameTypeName
+          : gameTypeName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gamesPlayed: freezed == gamesPlayed
+          ? _value.gamesPlayed
+          : gamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int?,
+      minTime: freezed == minTime
+          ? _value.minTime
+          : minTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      minTimeDate: freezed == minTimeDate
+          ? _value.minTimeDate
+          : minTimeDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      overallGamesPlayed: freezed == overallGamesPlayed
+          ? _value.overallGamesPlayed
+          : overallGamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int?,
+      overallMinTime: freezed == overallMinTime
+          ? _value.overallMinTime
+          : overallMinTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      overallMinTimeDate: freezed == overallMinTimeDate
+          ? _value.overallMinTimeDate
+          : overallMinTimeDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$DailyImplCopyWith<$Res> implements $DailyCopyWith<$Res> {
+  factory _$$DailyImplCopyWith(
+          _$DailyImpl value, $Res Function(_$DailyImpl) then) =
+      __$$DailyImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: "game_type_id") int? gameTypeId,
+      @JsonKey(name: "game_type_name") String? gameTypeName,
+      @JsonKey(name: "games_played") int? gamesPlayed,
+      @JsonKey(name: "min_time") String? minTime,
+      @JsonKey(name: "min_time_date") String? minTimeDate,
+      @JsonKey(name: "overall_games_played") int? overallGamesPlayed,
+      @JsonKey(name: "overall_min_time") String? overallMinTime,
+      @JsonKey(name: "overall_min_time_date") String? overallMinTimeDate});
+}
+
+/// @nodoc
+class __$$DailyImplCopyWithImpl<$Res>
+    extends _$DailyCopyWithImpl<$Res, _$DailyImpl>
+    implements _$$DailyImplCopyWith<$Res> {
+  __$$DailyImplCopyWithImpl(
+      _$DailyImpl _value, $Res Function(_$DailyImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? gameTypeId = freezed,
+    Object? gameTypeName = freezed,
+    Object? gamesPlayed = freezed,
+    Object? minTime = freezed,
+    Object? minTimeDate = freezed,
+    Object? overallGamesPlayed = freezed,
+    Object? overallMinTime = freezed,
+    Object? overallMinTimeDate = freezed,
+  }) {
+    return _then(_$DailyImpl(
+      gameTypeId: freezed == gameTypeId
+          ? _value.gameTypeId
+          : gameTypeId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      gameTypeName: freezed == gameTypeName
+          ? _value.gameTypeName
+          : gameTypeName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gamesPlayed: freezed == gamesPlayed
+          ? _value.gamesPlayed
+          : gamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int?,
+      minTime: freezed == minTime
+          ? _value.minTime
+          : minTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      minTimeDate: freezed == minTimeDate
+          ? _value.minTimeDate
+          : minTimeDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      overallGamesPlayed: freezed == overallGamesPlayed
+          ? _value.overallGamesPlayed
+          : overallGamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int?,
+      overallMinTime: freezed == overallMinTime
+          ? _value.overallMinTime
+          : overallMinTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      overallMinTimeDate: freezed == overallMinTimeDate
+          ? _value.overallMinTimeDate
+          : overallMinTimeDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$DailyImpl implements _Daily {
+  const _$DailyImpl(
+      {@JsonKey(name: "game_type_id") this.gameTypeId = 0,
+      @JsonKey(name: "game_type_name") this.gameTypeName = '',
+      @JsonKey(name: "games_played") this.gamesPlayed = 0,
+      @JsonKey(name: "min_time") this.minTime = '',
+      @JsonKey(name: "min_time_date") this.minTimeDate = '',
+      @JsonKey(name: "overall_games_played") this.overallGamesPlayed = 0,
+      @JsonKey(name: "overall_min_time") this.overallMinTime = '',
+      @JsonKey(name: "overall_min_time_date") this.overallMinTimeDate = ''});
+
+  factory _$DailyImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DailyImplFromJson(json);
+
+  @override
+  @JsonKey(name: "game_type_id")
+  final int? gameTypeId;
+  @override
+  @JsonKey(name: "game_type_name")
+  final String? gameTypeName;
+  @override
+  @JsonKey(name: "games_played")
+  final int? gamesPlayed;
+  @override
+  @JsonKey(name: "min_time")
+  final String? minTime;
+  @override
+  @JsonKey(name: "min_time_date")
+  final String? minTimeDate;
+  @override
+  @JsonKey(name: "overall_games_played")
+  final int? overallGamesPlayed;
+  @override
+  @JsonKey(name: "overall_min_time")
+  final String? overallMinTime;
+  @override
+  @JsonKey(name: "overall_min_time_date")
+  final String? overallMinTimeDate;
+
+  @override
+  String toString() {
+    return 'Daily(gameTypeId: $gameTypeId, gameTypeName: $gameTypeName, gamesPlayed: $gamesPlayed, minTime: $minTime, minTimeDate: $minTimeDate, overallGamesPlayed: $overallGamesPlayed, overallMinTime: $overallMinTime, overallMinTimeDate: $overallMinTimeDate)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DailyImpl &&
+            (identical(other.gameTypeId, gameTypeId) ||
+                other.gameTypeId == gameTypeId) &&
+            (identical(other.gameTypeName, gameTypeName) ||
+                other.gameTypeName == gameTypeName) &&
+            (identical(other.gamesPlayed, gamesPlayed) ||
+                other.gamesPlayed == gamesPlayed) &&
+            (identical(other.minTime, minTime) || other.minTime == minTime) &&
+            (identical(other.minTimeDate, minTimeDate) ||
+                other.minTimeDate == minTimeDate) &&
+            (identical(other.overallGamesPlayed, overallGamesPlayed) ||
+                other.overallGamesPlayed == overallGamesPlayed) &&
+            (identical(other.overallMinTime, overallMinTime) ||
+                other.overallMinTime == overallMinTime) &&
+            (identical(other.overallMinTimeDate, overallMinTimeDate) ||
+                other.overallMinTimeDate == overallMinTimeDate));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      gameTypeId,
+      gameTypeName,
+      gamesPlayed,
+      minTime,
+      minTimeDate,
+      overallGamesPlayed,
+      overallMinTime,
+      overallMinTimeDate);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DailyImplCopyWith<_$DailyImpl> get copyWith =>
+      __$$DailyImplCopyWithImpl<_$DailyImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$DailyImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Daily implements Daily {
+  const factory _Daily(
+      {@JsonKey(name: "game_type_id") final int? gameTypeId,
+      @JsonKey(name: "game_type_name") final String? gameTypeName,
+      @JsonKey(name: "games_played") final int? gamesPlayed,
+      @JsonKey(name: "min_time") final String? minTime,
+      @JsonKey(name: "min_time_date") final String? minTimeDate,
+      @JsonKey(name: "overall_games_played") final int? overallGamesPlayed,
+      @JsonKey(name: "overall_min_time") final String? overallMinTime,
+      @JsonKey(name: "overall_min_time_date")
+      final String? overallMinTimeDate}) = _$DailyImpl;
+
+  factory _Daily.fromJson(Map<String, dynamic> json) = _$DailyImpl.fromJson;
+
+  @override
+  @JsonKey(name: "game_type_id")
+  int? get gameTypeId;
+  @override
+  @JsonKey(name: "game_type_name")
+  String? get gameTypeName;
+  @override
+  @JsonKey(name: "games_played")
+  int? get gamesPlayed;
+  @override
+  @JsonKey(name: "min_time")
+  String? get minTime;
+  @override
+  @JsonKey(name: "min_time_date")
+  String? get minTimeDate;
+  @override
+  @JsonKey(name: "overall_games_played")
+  int? get overallGamesPlayed;
+  @override
+  @JsonKey(name: "overall_min_time")
+  String? get overallMinTime;
+  @override
+  @JsonKey(name: "overall_min_time_date")
+  String? get overallMinTimeDate;
+  @override
+  @JsonKey(ignore: true)
+  _$$DailyImplCopyWith<_$DailyImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
